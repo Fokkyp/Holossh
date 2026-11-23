@@ -1,8 +1,22 @@
-# Holossh
+<div align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./assets/app-icon/AppIcon-Dark.png" />
+    <source media="(prefers-color-scheme: light)" srcset="./assets/app-icon/AppIcon-Light.png" />
+    <img src="./assets/app-icon/AppIcon-Dark.png" alt="Holossh Logo" width="104" height="104" />
+  </picture>
 
-[简体中文](./README.md) | [繁體中文](./README.zh-TW.md) | [English](./README.en.md) | [日本語](./README.ja.md) | **한국어**
+  <h1>Holossh</h1>
 
-**아름답고 크로스 플랫폼 동기화를 지원하는 고성능 SSH 클라이언트.**
+  <p><strong>아름답고 크로스 플랫폼 동기화를 지원하는 고성능 SSH 클라이언트.</strong></p>
+
+  <p>
+    <a href="./README.md">简体中文</a> ·
+    <a href="./README.zh-TW.md">繁體中文</a> ·
+    <a href="./README.en.md">English</a> ·
+    <a href="./README.ja.md">日本語</a> ·
+    <strong>한국어</strong>
+  </p>
+</div>
 
 Holossh는 macOS를 위해 설계되고 GPUI로 구축된 네이티브 SSH 및 로컬 터미널 클라이언트입니다. 절제된 반투명 프로스트 글래스 디자인, 부드러운 GPU 가속 터미널 렌더링, 내장 SFTP 파일 관리, 그리고 종단간 암호화 기반 멀티 디바이스 동기화를 제공합니다.
 

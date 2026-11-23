@@ -1,8 +1,22 @@
-# Holossh
+<div align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./assets/app-icon/AppIcon-Dark.png" />
+    <source media="(prefers-color-scheme: light)" srcset="./assets/app-icon/AppIcon-Light.png" />
+    <img src="./assets/app-icon/AppIcon-Dark.png" alt="Holossh Logo" width="104" height="104" />
+  </picture>
 
-[简体中文](./README.md) | [繁體中文](./README.zh-TW.md) | **English** | [日本語](./README.ja.md) | [한국어](./README.ko.md)
+  <h1>Holossh</h1>
 
-**A refined, high-performance SSH client with cross-device encrypted sync.**
+  <p><strong>A refined, high-performance SSH client with cross-device encrypted sync.</strong></p>
+
+  <p>
+    <a href="./README.md">简体中文</a> ·
+    <a href="./README.zh-TW.md">繁體中文</a> ·
+    <strong>English</strong> ·
+    <a href="./README.ja.md">日本語</a> ·
+    <a href="./README.ko.md">한국어</a>
+  </p>
+</div>
 
 Holossh is a native SSH and local terminal client crafted for macOS and built with GPUI. It pairs a restrained frosted-glass aesthetic with smooth GPU-accelerated terminal rendering, built-in SFTP file management, and end-to-end encrypted multi-device sync.
 

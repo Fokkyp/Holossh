@@ -1,8 +1,22 @@
-# Holossh
+<div align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./assets/app-icon/AppIcon-Dark.png" />
+    <source media="(prefers-color-scheme: light)" srcset="./assets/app-icon/AppIcon-Light.png" />
+    <img src="./assets/app-icon/AppIcon-Dark.png" alt="Holossh Logo" width="104" height="104" />
+  </picture>
 
-[简体中文](./README.md) | **繁體中文** | [English](./README.en.md) | [日本語](./README.ja.md) | [한국어](./README.ko.md)
+  <h1>Holossh</h1>
 
-**優美的、支援跨平台同步的高效能 SSH 用戶端。**
+  <p><strong>優美的、支援跨平台同步的高效能 SSH 用戶端。</strong></p>
+
+  <p>
+    <a href="./README.md">简体中文</a> ·
+    <strong>繁體中文</strong> ·
+    <a href="./README.en.md">English</a> ·
+    <a href="./README.ja.md">日本語</a> ·
+    <a href="./README.ko.md">한국어</a>
+  </p>
+</div>
 
 Holossh 是一款專為 macOS 打造的原生 SSH 與本機終端機用戶端，採用 GPUI 建構，結合通透克制的毛玻璃磨砂視覺、流暢的 GPU 加速終端機算繪、內建 SFTP 檔案管理，以及端對端加密的多裝置雲端同步能力。
 
