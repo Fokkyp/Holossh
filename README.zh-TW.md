@@ -129,3 +129,7 @@ cargo run --release
 ## 開源授權
 
 本專案基於 [GNU General Public License v3.0 (GPL-3.0)](./LICENSE) 開源。
+
+---
+
+<sub>友情連結：<a href="https://linux.do/">LINUX DO</a></sub>

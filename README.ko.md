@@ -128,3 +128,7 @@ cargo run --release
 ## 라이선스
 
 이 프로젝트는 [GNU General Public License v3.0 (GPL-3.0)](./LICENSE) 라이선스로 배포됩니다.
+
+---
+
+<sub>커뮤니티 링크: <a href="https://linux.do/">LINUX DO</a></sub>
