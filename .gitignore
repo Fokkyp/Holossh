@@ -1,0 +1,16 @@
+# Rust build outputs
+/target/
+
+# Local development docs & agent instructions (never upload)
+/docs/
+/AGENTS.md
+
+# OS / Editor / Temp files
+.DS_Store
+*.swp
+*.swo
+*.bak
+*.tmp
+*.log
+.idea/
+.vscode/

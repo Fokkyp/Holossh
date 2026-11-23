@@ -1,0 +1,61 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- 中央横梁裁剪蒙版 (已校准至画布绝对中心 Y=512) -->
+    <clipPath id="Symbol_Only_Crossbar_Clip">
+      <rect x="422" y="484" width="190" height="56" rx="28" />
+    </clipPath>
+
+    <!-- 左侧 > 纯白磨砂晶体渐变 -->
+    <linearGradient id="Crystal_White_Grad" x1="302" y1="346" x2="457" y2="671" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#D4D4D8" />
+    </linearGradient>
+
+    <!-- 右侧 |_ 铂金银灰磨砂渐变 -->
+    <linearGradient id="Platinum_Silver_Grad" x1="582" y1="346" x2="727" y2="671" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F4F4F5" />
+      <stop offset="50%" stop-color="#A1A1AA" />
+      <stop offset="100%" stop-color="#52525B" />
+    </linearGradient>
+
+    <!-- 柔和立体悬浮阴影滤镜 (保证在透明底/浅色底上也有清晰边界) -->
+    <filter id="Soft_Symbol_Shadow" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="12" />
+    </filter>
+  </defs>
+
+  <!-- 核心符号本体 (无任何背景层，已在 1024x1024 画布居中) -->
+  <g id="HoloSSH_Pure_Symbol_NoBg">
+    
+    <!-- 1. 底层烟熏横梁 (含左右两翼投射的穿插遮挡阴影) -->
+    <g id="Window_Crossbar" clip-path="url(#Symbol_Only_Crossbar_Clip)">
+      <rect x="422" y="484" width="190" height="56" rx="28" fill="#27272A" stroke="#FFFFFF" stroke-opacity="0.22" stroke-width="2" />
+      <!-- 左侧 > 投射在横梁上的遮挡阴影 -->
+      <path d="M 306 368 L 446 496 Q 462 512 446 528 L 306 656" stroke="#000000" stroke-width="76" stroke-linecap="round" stroke-linejoin="round" filter="url(#Soft_Symbol_Shadow)" opacity="0.85" />
+      <!-- 右侧 |_ 投射在横梁上的遮挡阴影 -->
+      <line x1="582" y1="368" x2="582" y2="616" stroke="#000000" stroke-width="76" stroke-linecap="round" filter="url(#Soft_Symbol_Shadow)" opacity="0.85" />
+    </g>
+
+    <!-- 2. 右侧 |_ 铂金银灰磨砂光带 -->
+    <g id="Right_Stem_Group">
+      <path id="Right_Stem_Shadow" d="M 582 378 L 582 620 Q 582 666 628 666 L 718 666" stroke="#000000" stroke-opacity="0.45" stroke-width="60" stroke-linecap="round" stroke-linejoin="round" filter="url(#Soft_Symbol_Shadow)" />
+      <path id="Right_Stem_Rim" d="M 582 368 L 582 610 Q 582 656 628 656 L 718 656" stroke="#FFFFFF" stroke-opacity="0.65" stroke-width="60" stroke-linecap="round" stroke-linejoin="round" />
+      <path id="Right_Stem_Body" d="M 582 368 L 582 610 Q 582 656 628 656 L 718 656" stroke="url(#Platinum_Silver_Grad)" stroke-width="56" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+
+    <!-- 3. 左侧 > 纯白磨砂水晶光带 -->
+    <g id="Left_Chevron_Group">
+      <path id="Left_Chevron_Shadow" d="M 306 378 L 446 506 Q 462 522 446 538 L 306 666" stroke="#000000" stroke-opacity="0.55" stroke-width="60" stroke-linecap="round" stroke-linejoin="round" filter="url(#Soft_Symbol_Shadow)" />
+      <path id="Left_Chevron_Rim" d="M 306 368 L 446 496 Q 462 512 446 528 L 306 656" stroke="#FFFFFF" stroke-width="60" stroke-linecap="round" stroke-linejoin="round" />
+      <path id="Left_Chevron_Body" d="M 306 368 L 446 496 Q 462 512 446 528 L 306 656" stroke="url(#Crystal_White_Grad)" stroke-width="56" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+
+    <!-- 4. 右上角纯白呼吸状态点 -->
+    <g id="Status_Pulse_Dot">
+      <circle cx="704" cy="374" r="22" fill="#000000" fill-opacity="0.35" filter="url(#Soft_Symbol_Shadow)" />
+      <circle cx="704" cy="368" r="28" fill="#FFFFFF" fill-opacity="0.08" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="1.5" />
+      <circle cx="704" cy="368" r="18" fill="#FFFFFF" />
+    </g>
+
+  </g>
+</svg>

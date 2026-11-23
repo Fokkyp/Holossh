@@ -1,0 +1,64 @@
+[package]
+name = "holossh"
+version = "0.9.0"
+edition = "2024"
+description = "优美的支持跨平台同步的高性能SSH客户端"
+license = "GPL-3.0-only"
+
+[[bin]]
+name = "Holossh"
+path = "src/main.rs"
+
+[dependencies]
+# 核心 UI 框架（硬性约束：仅使用 Rust GPUI，禁止引入其他 UI 框架）
+# 官方文档：https://gpui.rs/
+gpui = "0.2.2"
+
+# 异步运行时与纯 Rust SSHv2 / SFTP 协议栈
+tokio = { version = "1.54", features = ["rt-multi-thread", "io-util", "net", "sync", "time", "fs"] }
+russh = "0.65.2"
+russh-sftp = "3.0.1"
+
+# 高性能 VT100/xterm-256color 终端仿真引擎
+alacritty_terminal = "0.26.0"
+
+# 配置持久化、时间格式化与路径解析
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+dirs = "6.0"
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
+
+# 云端同步（GitHub Gist REST API + S3 兼容对象存储 AWS SigV4）
+reqwest = { package = "zed-reqwest", version = "0.12.15-zed", default-features = false, features = ["rustls-tls-native-roots"] }
+sha2 = "0.10.9"
+hmac = "0.12.1"
+hex = "0.4.3"
+url = "2.5.9"
+
+# 跨平台端到端加密密钥库（Argon2id 密钥派生 + AES-256-GCM 认证加密 + X25519 公钥写入封装）
+aes-gcm = "0.11.1"
+argon2 = "0.6.0"
+curve25519-dalek = "5"
+getrandom = "0.4.3"
+zeroize = "1.9.2"
+
+[target.'cfg(unix)'.dependencies]
+# 原生本地终端 POSIX PTY（openpty / TIOCSWINSZ / setsid / 进程组信号控制）
+libc = "0.2"
+
+[target.'cfg(target_os = "macos")'.dependencies]
+# 原生窗口句柄与 CoreGraphics 真实高斯模糊半径控制
+raw-window-handle = "0.6.2"
+objc = "0.2.7"
+
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+strip = true

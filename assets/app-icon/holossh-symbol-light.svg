@@ -1,0 +1,81 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- 中央横梁裁剪蒙版 (已校准至画布绝对中心 Y=512) -->
+    <clipPath id="Symbol_Only_Crossbar_Clip_Light">
+      <rect x="422" y="484" width="190" height="56" rx="28" />
+    </clipPath>
+
+    <!-- 底层浅色磨砂铂金横梁渐变 -->
+    <linearGradient id="Light_Crossbar_Grad" x1="422" y1="484" x2="612" y2="540" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#D4D4D8" />
+      <stop offset="50%" stop-color="#E4E4E7" />
+      <stop offset="100%" stop-color="#C4C4CC" />
+    </linearGradient>
+
+    <!-- 左侧 > 黑曜石磨砂墨晶渐变 -->
+    <linearGradient id="Obsidian_Ink_Grad" x1="302" y1="346" x2="457" y2="671" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2E2E34" />
+      <stop offset="55%" stop-color="#18181B" />
+      <stop offset="100%" stop-color="#09090B" />
+    </linearGradient>
+
+    <!-- 左侧 > 细微高光金属描边 -->
+    <linearGradient id="Obsidian_Rim_Grad" x1="302" y1="346" x2="457" y2="671" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#71717A" />
+      <stop offset="100%" stop-color="#18181B" />
+    </linearGradient>
+
+    <!-- 右侧 |_ 烟熏钛银磨砂渐变 -->
+    <linearGradient id="Titanium_Slate_Grad" x1="582" y1="346" x2="727" y2="671" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#71717A" />
+      <stop offset="50%" stop-color="#4A4A52" />
+      <stop offset="100%" stop-color="#27272A" />
+    </linearGradient>
+
+    <!-- 右侧 |_ 钛银外缘高光 -->
+    <linearGradient id="Titanium_Rim_Grad" x1="582" y1="346" x2="727" y2="671" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#A1A1AA" />
+      <stop offset="100%" stop-color="#3F3F46" />
+    </linearGradient>
+
+    <!-- 柔和立体悬浮阴影滤镜 -->
+    <filter id="Soft_Symbol_Shadow_Light" filterUnits="userSpaceOnUse" x="160" y="200" width="704" height="624">
+      <feGaussianBlur stdDeviation="12" />
+    </filter>
+  </defs>
+
+  <!-- 核心符号本体 (浅色模式，无背景层，已在 1024x1024 画布居中) -->
+  <g id="HoloSSH_Pure_Symbol_Light_NoBg">
+
+    <!-- 1. 底层浅色磨砂横梁 (含左右两翼投射的穿插遮挡阴影) -->
+    <g id="Window_Crossbar_Light" clip-path="url(#Symbol_Only_Crossbar_Clip_Light)">
+      <rect x="422" y="484" width="190" height="56" rx="28" fill="url(#Light_Crossbar_Grad)" stroke="#18181B" stroke-opacity="0.16" stroke-width="2" />
+      <!-- 左侧 > 投射在横梁上的遮挡阴影 -->
+      <path d="M 306 368 L 446 496 Q 462 512 446 528 L 306 656" stroke="#09090B" stroke-width="74" stroke-linecap="round" stroke-linejoin="round" filter="url(#Soft_Symbol_Shadow_Light)" opacity="0.42" />
+      <!-- 右侧 |_ 投射在横梁上的遮挡阴影 -->
+      <line x1="582" y1="368" x2="582" y2="616" stroke="#09090B" stroke-width="74" stroke-linecap="round" filter="url(#Soft_Symbol_Shadow_Light)" opacity="0.38" />
+    </g>
+
+    <!-- 2. 右侧 |_ 烟熏钛银磨砂光带 -->
+    <g id="Right_Stem_Group_Light">
+      <path d="M 582 378 L 582 620 Q 582 666 628 666 L 718 666" stroke="#09090B" stroke-opacity="0.18" stroke-width="60" stroke-linecap="round" stroke-linejoin="round" filter="url(#Soft_Symbol_Shadow_Light)" />
+      <path d="M 582 368 L 582 610 Q 582 656 628 656 L 718 656" stroke="url(#Titanium_Rim_Grad)" stroke-width="60" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M 582 368 L 582 610 Q 582 656 628 656 L 718 656" stroke="url(#Titanium_Slate_Grad)" stroke-width="56" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+
+    <!-- 3. 左侧 > 黑曜石磨砂墨晶光带 -->
+    <g id="Left_Chevron_Group_Light">
+      <path d="M 306 378 L 446 506 Q 462 522 446 538 L 306 666" stroke="#09090B" stroke-opacity="0.24" stroke-width="60" stroke-linecap="round" stroke-linejoin="round" filter="url(#Soft_Symbol_Shadow_Light)" />
+      <path d="M 306 368 L 446 496 Q 462 512 446 528 L 306 656" stroke="url(#Obsidian_Rim_Grad)" stroke-width="60" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M 306 368 L 446 496 Q 462 512 446 528 L 306 656" stroke="url(#Obsidian_Ink_Grad)" stroke-width="56" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+
+    <!-- 4. 右上角黑曜石呼吸状态点 -->
+    <g id="Status_Pulse_Dot_Light">
+      <circle cx="704" cy="374" r="22" fill="#09090B" fill-opacity="0.14" filter="url(#Soft_Symbol_Shadow_Light)" />
+      <circle cx="704" cy="368" r="28" fill="#18181B" fill-opacity="0.07" stroke="#18181B" stroke-opacity="0.22" stroke-width="1.5" />
+      <circle cx="704" cy="368" r="18" fill="#18181B" />
+    </g>
+
+  </g>
+</svg>

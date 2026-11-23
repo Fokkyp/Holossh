@@ -1,0 +1,89 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- macOS 标准 824x824 圆角方底外部阴影 -->
+    <filter id="Dock_Plate_Shadow_Dark" x="-12%" y="-10%" width="124%" height="128%">
+      <feDropShadow dx="0" dy="18" stdDeviation="24" flood-color="#000000" flood-opacity="0.48" />
+    </filter>
+
+    <!-- 深色烟熏黑曜石磨砂底板 -->
+    <linearGradient id="Dark_Plate_Bg" x1="512" y1="100" x2="512" y2="924" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#26262B" />
+      <stop offset="48%" stop-color="#151518" />
+      <stop offset="100%" stop-color="#0B0B0D" />
+    </linearGradient>
+
+    <!-- 顶部柔和漫反射镜面光晕 -->
+    <radialGradient id="Dark_Plate_Sheen" cx="512" cy="140" r="560" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.11" />
+      <stop offset="55%" stop-color="#FFFFFF" stop-opacity="0.02" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- 内边缘镜面高光描边 -->
+    <linearGradient id="Dark_Plate_Rim" x1="512" y1="100" x2="512" y2="924" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.28" />
+      <stop offset="35%" stop-color="#FFFFFF" stop-opacity="0.10" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.05" />
+    </linearGradient>
+
+    <clipPath id="Dark_Plate_Clip">
+      <rect x="100" y="100" width="824" height="824" rx="185.4" />
+    </clipPath>
+
+    <!-- 中央横梁裁剪蒙版 -->
+    <clipPath id="Symbol_Crossbar_Clip_Dark">
+      <rect x="422" y="484" width="190" height="56" rx="28" />
+    </clipPath>
+
+    <linearGradient id="Crystal_White_Grad_App" x1="302" y1="346" x2="457" y2="671" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#D4D4D8" />
+    </linearGradient>
+
+    <linearGradient id="Platinum_Silver_Grad_App" x1="582" y1="346" x2="727" y2="671" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F4F4F5" />
+      <stop offset="50%" stop-color="#A1A1AA" />
+      <stop offset="100%" stop-color="#52525B" />
+    </linearGradient>
+
+    <filter id="Soft_Symbol_Shadow_AppDark" filterUnits="userSpaceOnUse" x="160" y="200" width="704" height="624">
+      <feGaussianBlur stdDeviation="12" />
+    </filter>
+  </defs>
+
+  <!-- 1. macOS 标准磨砂圆角方底 -->
+  <g filter="url(#Dock_Plate_Shadow_Dark)">
+    <rect x="100" y="100" width="824" height="824" rx="185.4" fill="url(#Dark_Plate_Bg)" />
+  </g>
+  <g clip-path="url(#Dark_Plate_Clip)">
+    <rect x="100" y="100" width="824" height="824" fill="url(#Dark_Plate_Sheen)" />
+  </g>
+  <rect x="101.5" y="101.5" width="821" height="821" rx="184" stroke="url(#Dark_Plate_Rim)" stroke-width="3" />
+
+  <!-- 2. 核心符号本体 (居中放大至 1.18x，适配 macOS Dock 视觉重心) -->
+  <g transform="translate(512 512) scale(1.18) translate(-512 -512)">
+    <g clip-path="url(#Symbol_Crossbar_Clip_Dark)">
+      <rect x="422" y="484" width="190" height="56" rx="28" fill="#27272A" stroke="#FFFFFF" stroke-opacity="0.22" stroke-width="2" />
+      <path d="M 306 368 L 446 496 Q 462 512 446 528 L 306 656" stroke="#000000" stroke-width="76" stroke-linecap="round" stroke-linejoin="round" filter="url(#Soft_Symbol_Shadow_AppDark)" opacity="0.85" />
+      <line x1="582" y1="368" x2="582" y2="616" stroke="#000000" stroke-width="76" stroke-linecap="round" filter="url(#Soft_Symbol_Shadow_AppDark)" opacity="0.85" />
+    </g>
+
+    <g>
+      <path d="M 582 378 L 582 620 Q 582 666 628 666 L 718 666" stroke="#000000" stroke-opacity="0.45" stroke-width="60" stroke-linecap="round" stroke-linejoin="round" filter="url(#Soft_Symbol_Shadow_AppDark)" />
+      <path d="M 582 368 L 582 610 Q 582 656 628 656 L 718 656" stroke="#FFFFFF" stroke-opacity="0.65" stroke-width="60" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M 582 368 L 582 610 Q 582 656 628 656 L 718 656" stroke="url(#Platinum_Silver_Grad_App)" stroke-width="56" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+
+    <g>
+      <path d="M 306 378 L 446 506 Q 462 522 446 538 L 306 666" stroke="#000000" stroke-opacity="0.55" stroke-width="60" stroke-linecap="round" stroke-linejoin="round" filter="url(#Soft_Symbol_Shadow_AppDark)" />
+      <path d="M 306 368 L 446 496 Q 462 512 446 528 L 306 656" stroke="#FFFFFF" stroke-width="60" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M 306 368 L 446 496 Q 462 512 446 528 L 306 656" stroke="url(#Crystal_White_Grad_App)" stroke-width="56" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+
+    <g>
+      <circle cx="704" cy="374" r="22" fill="#000000" fill-opacity="0.35" filter="url(#Soft_Symbol_Shadow_AppDark)" />
+      <circle cx="704" cy="368" r="28" fill="#FFFFFF" fill-opacity="0.08" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="1.5" />
+      <circle cx="704" cy="368" r="18" fill="#FFFFFF" />
+    </g>
+  </g>
+</svg>

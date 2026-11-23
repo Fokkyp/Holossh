@@ -1,0 +1,106 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- macOS 标准 824x824 圆角方底外部阴影 -->
+    <filter id="Dock_Plate_Shadow_Light" x="-12%" y="-10%" width="124%" height="128%">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#09090B" flood-opacity="0.22" />
+    </filter>
+
+    <!-- 浅色珠光银白磨砂底板 -->
+    <linearGradient id="Light_Plate_Bg" x1="512" y1="100" x2="512" y2="924" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FAFAFC" />
+      <stop offset="52%" stop-color="#F1F2F6" />
+      <stop offset="100%" stop-color="#E2E4EB" />
+    </linearGradient>
+
+    <!-- 顶部清透镜面光泽 -->
+    <radialGradient id="Light_Plate_Sheen" cx="512" cy="130" r="540" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.92" />
+      <stop offset="60%" stop-color="#FFFFFF" stop-opacity="0.22" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- 外缘精致金属细边 -->
+    <linearGradient id="Light_Plate_Rim" x1="512" y1="100" x2="512" y2="924" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#D4D4D8" stop-opacity="0.72" />
+      <stop offset="45%" stop-color="#C4C4CC" stop-opacity="0.55" />
+      <stop offset="100%" stop-color="#9A9AA6" stop-opacity="0.58" />
+    </linearGradient>
+
+    <clipPath id="Light_Plate_Clip">
+      <rect x="100" y="100" width="824" height="824" rx="185.4" />
+    </clipPath>
+
+    <!-- 中央横梁裁剪蒙版 -->
+    <clipPath id="Symbol_Crossbar_Clip_AppLight">
+      <rect x="422" y="484" width="190" height="56" rx="28" />
+    </clipPath>
+
+    <linearGradient id="Light_Crossbar_Grad_App" x1="422" y1="484" x2="612" y2="540" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#D4D4D8" />
+      <stop offset="50%" stop-color="#E4E4E7" />
+      <stop offset="100%" stop-color="#C4C4CC" />
+    </linearGradient>
+
+    <linearGradient id="Obsidian_Ink_Grad_App" x1="302" y1="346" x2="457" y2="671" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2E2E34" />
+      <stop offset="55%" stop-color="#18181B" />
+      <stop offset="100%" stop-color="#09090B" />
+    </linearGradient>
+
+    <linearGradient id="Obsidian_Rim_Grad_App" x1="302" y1="346" x2="457" y2="671" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#71717A" />
+      <stop offset="100%" stop-color="#18181B" />
+    </linearGradient>
+
+    <linearGradient id="Titanium_Slate_Grad_App" x1="582" y1="346" x2="727" y2="671" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#71717A" />
+      <stop offset="50%" stop-color="#4A4A52" />
+      <stop offset="100%" stop-color="#27272A" />
+    </linearGradient>
+
+    <linearGradient id="Titanium_Rim_Grad_App" x1="582" y1="346" x2="727" y2="671" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#A1A1AA" />
+      <stop offset="100%" stop-color="#3F3F46" />
+    </linearGradient>
+
+    <filter id="Soft_Symbol_Shadow_AppLight" filterUnits="userSpaceOnUse" x="160" y="200" width="704" height="624">
+      <feGaussianBlur stdDeviation="12" />
+    </filter>
+  </defs>
+
+  <!-- 1. macOS 标准珠光浅色圆角方底 -->
+  <g filter="url(#Dock_Plate_Shadow_Light)">
+    <rect x="100" y="100" width="824" height="824" rx="185.4" fill="url(#Light_Plate_Bg)" />
+  </g>
+  <g clip-path="url(#Light_Plate_Clip)">
+    <rect x="100" y="100" width="824" height="824" fill="url(#Light_Plate_Sheen)" />
+  </g>
+  <rect x="101.5" y="101.5" width="821" height="821" rx="184" stroke="url(#Light_Plate_Rim)" stroke-width="3" />
+
+  <!-- 2. 浅色核心符号本体 (居中放大至 1.18x，与深色图标保持 1:1 几何重心) -->
+  <g transform="translate(512 512) scale(1.18) translate(-512 -512)">
+    <g clip-path="url(#Symbol_Crossbar_Clip_AppLight)">
+      <rect x="422" y="484" width="190" height="56" rx="28" fill="url(#Light_Crossbar_Grad_App)" stroke="#18181B" stroke-opacity="0.16" stroke-width="2" />
+      <path d="M 306 368 L 446 496 Q 462 512 446 528 L 306 656" stroke="#09090B" stroke-width="74" stroke-linecap="round" stroke-linejoin="round" filter="url(#Soft_Symbol_Shadow_AppLight)" opacity="0.42" />
+      <line x1="582" y1="368" x2="582" y2="616" stroke="#09090B" stroke-width="74" stroke-linecap="round" filter="url(#Soft_Symbol_Shadow_AppLight)" opacity="0.38" />
+    </g>
+
+    <g>
+      <path d="M 582 378 L 582 620 Q 582 666 628 666 L 718 666" stroke="#09090B" stroke-opacity="0.18" stroke-width="60" stroke-linecap="round" stroke-linejoin="round" filter="url(#Soft_Symbol_Shadow_AppLight)" />
+      <path d="M 582 368 L 582 610 Q 582 656 628 656 L 718 656" stroke="url(#Titanium_Rim_Grad_App)" stroke-width="60" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M 582 368 L 582 610 Q 582 656 628 656 L 718 656" stroke="url(#Titanium_Slate_Grad_App)" stroke-width="56" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+
+    <g>
+      <path d="M 306 378 L 446 506 Q 462 522 446 538 L 306 666" stroke="#09090B" stroke-opacity="0.24" stroke-width="60" stroke-linecap="round" stroke-linejoin="round" filter="url(#Soft_Symbol_Shadow_AppLight)" />
+      <path d="M 306 368 L 446 496 Q 462 512 446 528 L 306 656" stroke="url(#Obsidian_Rim_Grad_App)" stroke-width="60" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M 306 368 L 446 496 Q 462 512 446 528 L 306 656" stroke="url(#Obsidian_Ink_Grad_App)" stroke-width="56" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+
+    <g>
+      <circle cx="704" cy="374" r="22" fill="#09090B" fill-opacity="0.14" filter="url(#Soft_Symbol_Shadow_AppLight)" />
+      <circle cx="704" cy="368" r="28" fill="#18181B" fill-opacity="0.07" stroke="#18181B" stroke-opacity="0.22" stroke-width="1.5" />
+      <circle cx="704" cy="368" r="18" fill="#18181B" />
+    </g>
+  </g>
+</svg>
