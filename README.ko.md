@@ -16,6 +16,10 @@
     <a href="./README.ja.md">日本語</a> ·
     <strong>한국어</strong>
   </p>
+
+  <p>
+    <a href="https://github.com/Fokkyp/Holossh/releases/latest"><strong>최신 버전 다운로드 (macOS)</strong></a>
+  </p>
 </div>
 
 Holossh는 macOS를 위해 설계되고 GPUI로 구축된 네이티브 SSH 및 로컬 터미널 클라이언트입니다. 절제된 반투명 프로스트 글래스 디자인, 부드러운 GPU 가속 터미널 렌더링, 내장 SFTP 파일 관리, 그리고 종단간 암호화 기반 멀티 디바이스 동기화를 제공합니다.
@@ -82,6 +86,15 @@ Holossh는 macOS를 위해 설계되고 GPUI로 구축된 네이티브 SSH 및 �
 | 사이드바 열기 / 닫기 | `⌘B` |
 | 글꼴 확대 / 축소 / 초기화 | `⌘+` / `⌘-` / `⌘0` |
 | 복사 / 붙여넣기 | `⌘C` / `⌘V` |
+
+---
+
+## 다운로드
+
+[GitHub Releases 최신 버전](https://github.com/Fokkyp/Holossh/releases/latest)에서 Mac용 `.dmg` 설치 파일을 다운로드하세요 (Apple Developer ID 서명 및 공증 완료, macOS 13.0 이상 지원):
+
+- **Apple Silicon**: `Holossh-*-macos-arm64.dmg`
+- **Intel Mac**: `Holossh-*-macos-x86_64.dmg`
 
 ---
 

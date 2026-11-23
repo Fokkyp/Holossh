@@ -16,6 +16,10 @@
     <a href="./README.ja.md">日本語</a> ·
     <a href="./README.ko.md">한국어</a>
   </p>
+
+  <p>
+    <a href="https://github.com/Fokkyp/Holossh/releases/latest"><strong>下載最新版本（macOS）</strong></a>
+  </p>
 </div>
 
 Holossh 是一款專為 macOS 打造的原生 SSH 與本機終端機用戶端，採用 GPUI 建構，結合通透克制的毛玻璃磨砂視覺、流暢的 GPU 加速終端機算繪、內建 SFTP 檔案管理，以及端對端加密的多裝置雲端同步能力。
@@ -83,6 +87,15 @@ Holossh 是一款專為 macOS 打造的原生 SSH 與本機終端機用戶端，
 | 展開 / 收起側邊欄 | `⌘B` |
 | 放大 / 縮小 / 重設字型大小 | `⌘+` / `⌘-` / `⌘0` |
 | 複製 / 貼上 | `⌘C` / `⌘V` |
+
+---
+
+## 下載安裝
+
+前往 [GitHub Releases 最新版本](https://github.com/Fokkyp/Holossh/releases/latest) 下載適用於你的 Mac 的 `.dmg` 安裝包（已通過 Apple Developer ID 簽章與蘋果官方公證，支援 macOS 13.0 及以上）：
+
+- **Apple Silicon**：`Holossh-*-macos-arm64.dmg`
+- **Intel Mac**：`Holossh-*-macos-x86_64.dmg`
 
 ---
 

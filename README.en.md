@@ -16,6 +16,10 @@
     <a href="./README.ja.md">日本語</a> ·
     <a href="./README.ko.md">한국어</a>
   </p>
+
+  <p>
+    <a href="https://github.com/Fokkyp/Holossh/releases/latest"><strong>Download Latest Release (macOS)</strong></a>
+  </p>
 </div>
 
 Holossh is a native SSH and local terminal client crafted for macOS and built with GPUI. It pairs a restrained frosted-glass aesthetic with smooth GPU-accelerated terminal rendering, built-in SFTP file management, and end-to-end encrypted multi-device sync.
@@ -82,6 +86,15 @@ Holossh is a native SSH and local terminal client crafted for macOS and built wi
 | Toggle Sidebar | `⌘B` |
 | Zoom In / Out / Reset Font | `⌘+` / `⌘-` / `⌘0` |
 | Copy / Paste | `⌘C` / `⌘V` |
+
+---
+
+## Download
+
+Download the latest signed and Apple-notarized `.dmg` installer from [GitHub Releases](https://github.com/Fokkyp/Holossh/releases/latest) (requires macOS 13.0 or later):
+
+- **Apple Silicon**: `Holossh-*-macos-arm64.dmg`
+- **Intel Mac**: `Holossh-*-macos-x86_64.dmg`
 
 ---
 

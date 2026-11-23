@@ -16,6 +16,10 @@
     <strong>日本語</strong> ·
     <a href="./README.ko.md">한국어</a>
   </p>
+
+  <p>
+    <a href="https://github.com/Fokkyp/Holossh/releases/latest"><strong>最新バージョンをダウンロード（macOS）</strong></a>
+  </p>
 </div>
 
 Holossh は macOS 向けに設計され、GPUI で構築されたネイティブ SSH・ローカルターミナルクライアントです。透明感のあるすりガラスデザイン、軽快な GPU アクセラレーション描画、内蔵 SFTP ファイル管理、そしてエンドツーエンド暗号化によるマルチデバイス同期を備えています。
@@ -82,6 +86,15 @@ Holossh は macOS 向けに設計され、GPUI で構築されたネイティブ
 | サイドバーを開閉 | `⌘B` |
 | フォント拡大 / 縮小 / リセット | `⌘+` / `⌘-` / `⌘0` |
 | コピー / ペースト | `⌘C` / `⌘V` |
+
+---
+
+## ダウンロード
+
+[GitHub Releases 最新版](https://github.com/Fokkyp/Holossh/releases/latest) からお使いの Mac 向け `.dmg` インストーラーをダウンロードしてください（Apple Developer ID 署名・公証済み、macOS 13.0 以降対応）：
+
+- **Apple Silicon**：`Holossh-*-macos-arm64.dmg`
+- **Intel Mac**：`Holossh-*-macos-x86_64.dmg`
 
 ---
 
