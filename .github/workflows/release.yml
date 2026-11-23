@@ -1,0 +1,183 @@
+name: Release macOS
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Optional version override (e.g. 0.9.0); defaults to Cargo.toml"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    name: Build, Sign & Notarize macOS
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain (arm64 + x86_64)
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin,x86_64-apple-darwin
+
+      - name: Cache Cargo dependencies
+        uses: Swatinem/rust-cache@v2
+
+      - name: Determine release version
+        id: meta
+        shell: bash
+        run: |
+          if [[ "${GITHUB_REF_TYPE:-}" == "tag" ]]; then
+            VER="${GITHUB_REF_NAME#v}"
+          elif [[ -n "${{ github.event.inputs.version }}" ]]; then
+            VER="${{ github.event.inputs.version }}"
+            VER="${VER#v}"
+          else
+            VER="$(awk -F'"' '/^version = / { print $2; exit }' Cargo.toml)"
+          fi
+          echo "version=$VER" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VER" >> "$GITHUB_OUTPUT"
+          echo "Release version: $VER"
+
+      - name: Run unit & integration tests
+        run: cargo test --locked
+
+      - name: Build Apple Silicon (aarch64-apple-darwin)
+        run: cargo build --release --locked --target aarch64-apple-darwin
+
+      - name: Build Intel (x86_64-apple-darwin)
+        run: cargo build --release --locked --target x86_64-apple-darwin
+
+      - name: Import Apple Developer ID certificate into temporary keychain
+        id: signing
+        if: ${{ secrets.MACOS_CERT_P12_BASE64 != '' }}
+        env:
+          MACOS_CERT_P12_BASE64: ${{ secrets.MACOS_CERT_P12_BASE64 }}
+          MACOS_CERT_PASSWORD: ${{ secrets.MACOS_CERT_PASSWORD }}
+          MACOS_SIGN_IDENTITY_OVERRIDE: ${{ secrets.MACOS_SIGN_IDENTITY }}
+        run: |
+          KEYCHAIN_PATH="$RUNNER_TEMP/holossh-signing.keychain-db"
+          KEYCHAIN_PASSWORD="$(openssl rand -base64 32)"
+          CERT_PATH="$RUNNER_TEMP/developer-id.p12"
+
+          echo "$MACOS_CERT_P12_BASE64" | base64 --decode > "$CERT_PATH"
+
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+
+          security import "$CERT_PATH" \
+            -P "$MACOS_CERT_PASSWORD" \
+            -A -t cert -f pkcs12 \
+            -k "$KEYCHAIN_PATH"
+
+          security set-key-partition-list \
+            -S apple-tool:,apple:,codesign: \
+            -s -k "$KEYCHAIN_PASSWORD" \
+            "$KEYCHAIN_PATH"
+
+          # Prepend temporary keychain to user search list
+          EXISTING_KEYCHAINS=$(security list-keychains -d user | tr -d '"' | tr '\n' ' ')
+          security list-keychains -d user -s "$KEYCHAIN_PATH" $EXISTING_KEYCHAINS
+
+          if [[ -n "$MACOS_SIGN_IDENTITY_OVERRIDE" ]]; then
+            IDENTITY="$MACOS_SIGN_IDENTITY_OVERRIDE"
+          else
+            IDENTITY="$(security find-identity -v -p codesigning "$KEYCHAIN_PATH" | awk -F'"' '/Developer ID Application:/ { print $2; exit }')"
+          fi
+
+          if [[ -z "$IDENTITY" ]]; then
+            echo "::error::No 'Developer ID Application' identity found in imported .p12 certificate."
+            security find-identity -v -p codesigning "$KEYCHAIN_PATH"
+            exit 1
+          fi
+
+          echo "identity=$IDENTITY" >> "$GITHUB_OUTPUT"
+          echo "signed=true" >> "$GITHUB_OUTPUT"
+          echo "Detected signing identity: $IDENTITY"
+
+      - name: Package macOS .app and .dmg (arm64 + x86_64)
+        env:
+          SIGN_IDENTITY: ${{ steps.signing.outputs.identity }}
+          VERSION: ${{ steps.meta.outputs.version }}
+        run: |
+          chmod +x scripts/package_macos.sh
+
+          ./scripts/package_macos.sh \
+            --binary target/aarch64-apple-darwin/release/Holossh \
+            --arch arm64 \
+            --version "$VERSION" \
+            --out-dir dist \
+            --sign-identity "${SIGN_IDENTITY:-}"
+
+          ./scripts/package_macos.sh \
+            --binary target/x86_64-apple-darwin/release/Holossh \
+            --arch x86_64 \
+            --version "$VERSION" \
+            --out-dir dist \
+            --sign-identity "${SIGN_IDENTITY:-}"
+
+      - name: Notarize and staple DMGs with Apple Notary Service
+        id: notarize
+        if: ${{ steps.signing.outputs.signed == 'true' && secrets.APPLE_ID != '' && secrets.APPLE_TEAM_ID != '' && secrets.APPLE_APP_PASSWORD != '' }}
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_APP_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
+          VERSION: ${{ steps.meta.outputs.version }}
+        run: |
+          for ARCH in arm64 x86_64; do
+            DMG="dist/Holossh-${VERSION}-macos-${ARCH}.dmg"
+            echo "==> Submitting $DMG to Apple Notary Service..."
+            xcrun notarytool submit "$DMG" \
+              --apple-id "$APPLE_ID" \
+              --team-id "$APPLE_TEAM_ID" \
+              --password "$APPLE_APP_PASSWORD" \
+              --wait
+
+            echo "==> Stapling notarization ticket to $DMG..."
+            xcrun stapler staple "$DMG"
+            xcrun stapler validate "$DMG"
+            spctl -a -t open --context context:primary-signature -v "$DMG"
+          done
+          echo "notarized=true" >> "$GITHUB_OUTPUT"
+
+      - name: Generate SHA-256 checksums
+        run: |
+          cd dist
+          shasum -a 256 Holossh-*.dmg > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
+      - name: Clean up temporary keychain and certificate
+        if: always()
+        run: |
+          rm -f "$RUNNER_TEMP/developer-id.p12"
+          if [[ -f "$RUNNER_TEMP/holossh-signing.keychain-db" ]]; then
+            security delete-keychain "$RUNNER_TEMP/holossh-signing.keychain-db" || true
+          fi
+
+      - name: Upload workflow artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Holossh-${{ steps.meta.outputs.version }}-macos
+          path: |
+            dist/Holossh-*.dmg
+            dist/SHA256SUMS.txt
+
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Holossh ${{ steps.meta.outputs.tag }}
+          generate_release_notes: true
+          files: |
+            dist/Holossh-*.dmg
+            dist/SHA256SUMS.txt

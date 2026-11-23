@@ -1,5 +1,6 @@
-# Rust build outputs
+# Rust build & packaging outputs
 /target/
+/dist/
 
 # Local development docs & agent instructions (never upload)
 /docs/
