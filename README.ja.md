@@ -125,6 +125,14 @@ cargo run --release
 
 ---
 
+## ロードマップ
+
+- [ ] **iOS 版**：デスクトップ版とエンドツーエンド暗号化同期で連携するネイティブモバイル SSH クライアント
+- [ ] **Windows 版**：同じ暗号化キー庫・同期エコシステムを共有するネイティブ高性能 Windows クライアント
+- [ ] **MCP サーバー**：認可のもとで AI ツールと運用連携できる Model Context Protocol（MCP）機能
+
+---
+
 ## ライセンス
 
 本プロジェクトは [GNU General Public License v3.0 (GPL-3.0)](./LICENSE) の下で公開されています。

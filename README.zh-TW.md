@@ -126,6 +126,14 @@ cargo run --release
 
 ---
 
+## 計畫排程
+
+- [ ] **iOS 版本**：行動端原生 SSH 用戶端，與桌面端端對端加密同步無縫互通
+- [ ] **Windows 版本**：原生高效能 Windows 用戶端，共享同一套加密設定與同步體系
+- [ ] **MCP 服務**：內建 MCP（Model Context Protocol）能力，方便在授權下與 AI 工具協作維運
+
+---
+
 ## 開源授權
 
 本專案基於 [GNU General Public License v3.0 (GPL-3.0)](./LICENSE) 開源。

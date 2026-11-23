@@ -125,6 +125,14 @@ cargo run --release
 
 ---
 
+## 로드맵
+
+- [ ] **iOS 버전**: 데스크톱과 종단간 암호화 동기화로 매끄럽게 연동되는 네이티브 모바일 SSH 클라이언트
+- [ ] **Windows 버전**: 동일한 암호화 키 저장소와 동기화 생태계를 공유하는 네이티브 고성능 Windows 클라이언트
+- [ ] **MCP 서비스**: 사용자 승인 하에 AI 도구와 안전하게 협업할 수 있는 Model Context Protocol(MCP) 지원
+
+---
+
 ## 라이선스
 
 이 프로젝트는 [GNU General Public License v3.0 (GPL-3.0)](./LICENSE) 라이선스로 배포됩니다.

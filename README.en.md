@@ -125,6 +125,14 @@ cargo run --release
 
 ---
 
+## Roadmap
+
+- [ ] **iOS App**: Native mobile SSH client with seamless end-to-end encrypted sync across devices
+- [ ] **Windows Version**: Native high-performance Windows client sharing the same encrypted vault and sync ecosystem
+- [ ] **MCP Server**: Built-in Model Context Protocol (MCP) support for authorized AI-assisted operations
+
+---
+
 ## License
 
 This project is licensed under the [GNU General Public License v3.0 (GPL-3.0)](./LICENSE).
