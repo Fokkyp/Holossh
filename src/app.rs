@@ -1121,19 +1121,12 @@ impl HoloSshApp {
                     if !vault_salt.is_empty() {
                         self.settings.sync_vault_salt = vault_salt;
                     }
-                    if let Some(vfile) = merged_vault_file {
-                        let _ = vault::save_encrypted_file(&vfile);
-                    }
-                    if let Some(vdata) = merged_vault_data {
-                        if self.is_vault_unlocked() {
-                            self.vault_data = Some(vdata);
-                        }
-                    }
                     if let Some(cat) = merged_catalog {
                         self.apply_merged_catalog(cat, revision);
                     } else {
                         self.settings.save();
                     }
+                    self.apply_merged_vault_from_sync(merged_vault_data, merged_vault_file);
                     sync::clear_pending_pull();
                     if should_toast {
                         self.toast_success(message);
@@ -1150,10 +1143,6 @@ impl HoloSshApp {
                 } => {
                     self.sync_last_failed = false;
                     self.sync_toast_next_result = false;
-                    let _ = vault::save_encrypted_file(&merged_vault_file);
-                    if self.is_vault_unlocked() {
-                        self.vault_data = Some(merged_vault_data);
-                    }
                     self.settings.last_sync_at = Some(synced_at);
                     if !sync_epoch.is_empty() {
                         self.settings.sync_epoch = sync_epoch;
@@ -1162,6 +1151,10 @@ impl HoloSshApp {
                         self.settings.sync_vault_salt = vault_salt;
                     }
                     self.apply_merged_catalog(merged_catalog, revision);
+                    self.apply_merged_vault_from_sync(
+                        Some(merged_vault_data),
+                        Some(merged_vault_file),
+                    );
                     sync::clear_pending_pull();
                 }
                 SyncEvent::PullNeedsUnlock {
@@ -2221,7 +2214,12 @@ impl HoloSshApp {
         }
     }
 
-    fn apply_merged_catalog(&mut self, catalog: SyncCatalog, revision: u64) {
+    fn apply_merged_catalog(&mut self, incoming: SyncCatalog, revision: u64) {
+        // 关键防竞态：始终与当前实时本地目录再做一次 CRDT 合并，
+        // 防止后台 AutoPull / 上一次 Push 在途期间用户刚删除的文件夹或主机被过期快照“诈尸”覆盖
+        let live_local = self.build_sync_catalog();
+        let catalog = sync::merge_catalogs(&live_local, &incoming);
+
         // 保留活跃标签的连接在线状态，仅更新合并后的主机元数据
         let prev_status: HashMap<String, HostStatus> = self
             .hosts
@@ -2254,6 +2252,30 @@ impl HoloSshApp {
         }
         HostProfile::save_all(&self.hosts);
         self.settings.save();
+    }
+
+    /// 同步回包写入密钥库时同样与当前实时解锁态合并并尊重最新 `deleted_hosts` 墓碑，防止覆盖并发删除/修改
+    fn apply_merged_vault_from_sync(
+        &mut self,
+        incoming_vdata: Option<VaultData>,
+        incoming_vfile: Option<vault::EncryptedVaultFile>,
+    ) {
+        if let (Some(key), Some(live_vdata), Some(remote_vdata)) = (
+            self.vault_key.as_ref(),
+            self.vault_data.as_mut(),
+            incoming_vdata,
+        ) {
+            vault::merge_vault_secrets(live_vdata, &remote_vdata, &self.settings.deleted_hosts);
+            if let Some(template) = incoming_vfile.as_ref() {
+                if let Ok(fresh) = vault::encrypt_vault_with_template(key, template, live_vdata) {
+                    let _ = vault::save_encrypted_file(&fresh);
+                    return;
+                }
+            }
+            let _ = vault::save_vault_with_key(key, live_vdata);
+        } else if let Some(vfile) = incoming_vfile {
+            let _ = vault::save_encrypted_file(&vfile);
+        }
     }
 
     fn try_apply_pending_pull_with_unlocked_vault(&mut self) {
@@ -3590,18 +3612,32 @@ impl HoloSshApp {
         let Some(target) = self.deleting_group_confirm.take() else {
             return;
         };
+        let target_trimmed = target.trim().to_string();
         let now_ms = now_unix_ms();
+        let prev_updated = self
+            .settings
+            .group_updated_at
+            .get(&target_trimmed)
+            .copied()
+            .unwrap_or(0);
+        let del_ts = now_ms.max(prev_updated.saturating_add(1));
+
         for h in &mut self.hosts {
-            if h.group == target {
+            if h.group.trim() == target_trimmed {
                 h.group.clear();
-                h.updated_at_ms = now_ms;
+                h.updated_at_ms = del_ts.max(h.updated_at_ms.saturating_add(1));
             }
         }
         HostProfile::save_all(&self.hosts);
-        self.settings.custom_groups.retain(|g| g != &target);
-        self.settings.deleted_groups.insert(target.clone(), now_ms);
+        self.settings
+            .custom_groups
+            .retain(|g| g.trim() != target_trimmed);
+        self.settings.group_updated_at.remove(&target_trimmed);
+        self.settings
+            .deleted_groups
+            .insert(target_trimmed.clone(), del_ts);
         self.settings.save();
-        self.expanded_groups.remove(&target);
+        self.expanded_groups.remove(&target_trimmed);
         self.maybe_auto_push_sync();
     }
 
@@ -3709,15 +3745,24 @@ impl HoloSshApp {
             vault::mark_deleted_in_locked_vault(host_id);
         }
         let now_ms = now_unix_ms();
+        let prev_host_updated = self
+            .hosts
+            .iter()
+            .find(|h| h.id == host_id)
+            .map(|h| h.updated_at_ms)
+            .unwrap_or(0);
+        let del_ts = now_ms.max(prev_host_updated.saturating_add(1));
         self.hosts.retain(|h| h.id != host_id);
         for h in &mut self.hosts {
             if h.jump_host_id.as_deref() == Some(host_id) {
                 h.jump_host_id = None;
-                h.updated_at_ms = now_ms;
+                h.updated_at_ms = del_ts.max(h.updated_at_ms.saturating_add(1));
             }
         }
         HostProfile::save_all(&self.hosts);
-        self.settings.deleted_hosts.insert(host_id.to_string(), now_ms);
+        self.settings
+            .deleted_hosts
+            .insert(host_id.to_string(), del_ts);
         self.settings.save();
         if self.active_host_id == host_id {
             self.active_host_id.clear();

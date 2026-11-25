@@ -343,7 +343,7 @@ pub fn merge_catalogs(local: &SyncCatalog, remote: &SyncCatalog) -> SyncCatalog 
                 by_id.insert(rh.id.clone(), rh.clone());
             }
             Some(lh) => {
-                if rh.updated_at_ms >= lh.updated_at_ms {
+                if rh.updated_at_ms > lh.updated_at_ms {
                     by_id.insert(rh.id.clone(), rh.clone());
                 }
             }
@@ -401,7 +401,7 @@ pub fn merge_catalogs(local: &SyncCatalog, remote: &SyncCatalog) -> SyncCatalog 
     for g in group_order {
         let updated = group_updated_at.get(&g).copied().unwrap_or(1);
         let deleted = deleted_groups.get(&g).copied().unwrap_or(0);
-        let used_by_host = hosts.iter().any(|h| h.group == g);
+        let used_by_host = hosts.iter().any(|h| h.group.trim() == g);
         if used_by_host || updated > deleted {
             custom_groups.push(g);
         }
@@ -1551,6 +1551,48 @@ mod tests {
         assert!(!merged.hosts.iter().any(|h| h.id == id_del)); // 删除墓碑生效不诈尸
         assert!(merged.custom_groups.contains(&"empty-local".to_string()));
         assert!(!merged.custom_groups.contains(&"removed-grp".to_string()));
+    }
+
+    #[test]
+    fn inflight_stale_sync_snapshot_never_resurrects_concurrent_local_delete() {
+        let id_keep = generate_host_uuid();
+        let id_del = generate_host_uuid();
+
+        // 模拟启动自动拉取或上一次推送在删除前捕获的过期合并快照（仍含「测试」分组和待删主机）
+        let stale_incoming = SyncCatalog {
+            hosts: vec![
+                HostProfile {
+                    group: "测试".into(),
+                    ..sample_host(&id_keep, "node-a", "10.0.0.1", 1000)
+                },
+                sample_host(&id_del, "node-del", "10.0.0.2", 1000),
+            ],
+            deleted_hosts: BTreeMap::new(),
+            custom_groups: vec!["测试".into(), "测试 2".into()],
+            group_updated_at: BTreeMap::from([("测试".into(), 1000), ("测试 2".into(), 1000)]),
+            deleted_groups: BTreeMap::new(),
+        };
+
+        // 在同步进行期间，用户在侧边栏确认删除了「测试」「测试 2」分组并删除了 node-del
+        let live_local = SyncCatalog {
+            hosts: vec![HostProfile {
+                group: String::new(),
+                ..sample_host(&id_keep, "node-a", "10.0.0.1", 2000)
+            }],
+            deleted_hosts: BTreeMap::from([(id_del.clone(), 2000)]),
+            custom_groups: Vec::new(),
+            group_updated_at: BTreeMap::new(),
+            deleted_groups: BTreeMap::from([("测试".into(), 2000), ("测试 2".into(), 2000)]),
+        };
+
+        let merged = merge_catalogs(&live_local, &stale_incoming);
+        assert_eq!(merged.hosts.len(), 1);
+        assert_eq!(merged.hosts[0].id, id_keep);
+        assert!(merged.hosts[0].group.is_empty());
+        assert!(merged.custom_groups.is_empty());
+        assert_eq!(merged.deleted_groups.get("测试"), Some(&2000));
+        assert_eq!(merged.deleted_groups.get("测试 2"), Some(&2000));
+        assert_eq!(merged.deleted_hosts.get(&id_del), Some(&2000));
     }
 
     #[test]
